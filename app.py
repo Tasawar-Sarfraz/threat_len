@@ -46,12 +46,27 @@ KNOWLEDGE_LEVELS = [
 # =========================================================
 # 3. LOAD API KEYS FROM .ENV
 # =========================================================
+from dotenv import load_dotenv
 
 load_dotenv()
 
-VT_API_KEY = os.getenv("VT_API_KEY")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+def load_secret(name):
 
+    # Streamlit Cloud
+    try:
+        value = st.secrets.get(name)
+
+        if value:
+            return value
+    except Exception:
+        pass
+
+    # Local VS Code .env
+    return os.getenv(name)
+
+
+VT_API_KEY = load_secret("VT_API_KEY")
+GEMINI_API_KEY = load_secret("GEMINI_API_KEY")
 
 # =========================================================
 # 4. HELPER FUNCTIONS
